@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       get 'on_sale'
       get 'new_arrivals'
       get 'recently_updated'
+      get 'search' # Add the search route here
     end
   end
 
