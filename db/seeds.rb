@@ -1,4 +1,3 @@
-# db/seeds.rb
 require 'faker'
 
 # Provinces data
@@ -8,22 +7,68 @@ provinces = [
   { name: "British Columbia", tax_type: "PST", gst: 0.05, pst: 0.07, hst: 0.0, qst: 0.0 }
 ]
 
-provinces.each { |province| Province.find_or_create_by!(province) }
+provinces.each do |province|
+  Province.find_or_create_by!(province)
+end
 
-# Create other records...
+# Brands
 brands = ["Brand A", "Brand B", "Brand C"]
-brands.each { |name| Brand.find_or_create_by!(name: name) }
+brands.each do |name|
+  Brand.find_or_create_by!(name: name)
+end
 
+# Types
 types = ["Lipstick", "Eyeliner", "Foundation"]
-types.each { |name| Type.find_or_create_by!(name: name) }
+types.each do |name|
+  Type.find_or_create_by!(name: name)
+end
 
+# Tags
 tags = ["Vegan", "Cruelty-Free", "Organic"]
-tags.each { |name| Tag.find_or_create_by!(name: name) }
+tags.each do |name|
+  Tag.find_or_create_by!(name: name)
+end
 
+# Categories and Products
 categories = ["Makeup", "Skincare", "Fragrance", "Hair"]
 categories.each do |category_name|
   category = Category.find_or_create_by!(name: category_name)
-  25.times do
+
+  # Specific products
+  Product.create!(
+    name: "Product 1",
+    description: "Description for product 1",
+    price: 19.99,
+    category: category,
+    brand: Brand.order('RANDOM()').first,
+    type: Type.order('RANDOM()').first,
+    image: File.open(Rails.root.join("public/images/placeholder.jpg")),
+    on_sale_status: [true, false].sample
+  )
+
+  Product.create!(
+    name: "Product 2",
+    description: "Description for product 2",
+    price: 29.99,
+    category: category,
+    brand: Brand.order('RANDOM()').first,
+    type: Type.order('RANDOM()').first,
+    image: File.open(Rails.root.join("public/images/placeholder.jpg")),
+    on_sale_status: [true, false].sample
+  )
+
+  Product.create!(
+    name: "Product 3",
+    description: "Description for product 3",
+    price: 39.99,
+    category: category,
+    brand: Brand.order('RANDOM()').first,
+    type: Type.order('RANDOM()').first,
+    image: File.open(Rails.root.join("public/images/placeholder.jpg")),
+    on_sale_status: [true, false].sample
+  )
+
+  22.times do
     product = Product.create!(
       name: Faker::Commerce.product_name,
       description: Faker::Lorem.paragraph,
@@ -38,6 +83,7 @@ categories.each do |category_name|
   end
 end
 
+# Customers
 10.times do
   Customer.create!(
     first_name: Faker::Name.first_name,
@@ -54,12 +100,16 @@ end
   )
 end
 
-Page.find_or_create_by!(title: "About Us") do |page|
-  page.content = "This is the about page."
-end
+# Pages
+pages = [
+  { title: "About Us", content: "This is the about page." },
+  { title: "Contact Us", content: "This is the contact page." }
+]
 
-Page.find_or_create_by!(title: "Contact Us") do |page|
-  page.content = "This is the contact page."
+pages.each do |page_data|
+  Page.find_or_create_by!(title: page_data[:title]) do |page|
+    page.content = page_data[:content]
+  end
 end
 
 # Ensure admin user exists
@@ -67,3 +117,5 @@ AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
   admin.password = 'password'
   admin.password_confirmation = 'password'
 end
+
+puts "Database seeded successfully!"

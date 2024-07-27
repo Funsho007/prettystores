@@ -9,14 +9,14 @@ Rails.application.routes.draw do
   resources :pages, param: :title, only: :show
 
   # Define root path
-  root to: 'pages#show', defaults: { title: 'home' }
+  root to: 'products#index'
 
   # Define health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
-  #
-  root 'products#index'
+  # Define products routes
   resources :products, only: [:index, :show]
+  resources :categories, only: [:index, :show] do
+    resources :products, only: [:index]
+end
 end
