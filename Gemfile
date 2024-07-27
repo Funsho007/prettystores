@@ -81,3 +81,4 @@ gem "kaminari", "~> 1.2"
 gem 'mini_magick' # For image processing
 
 gem 'carrierwave'
+

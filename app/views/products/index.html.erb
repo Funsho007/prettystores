@@ -1,4 +1,11 @@
+<!-- app/views/products/index.html.erb -->
 <h1>Available Products</h1>
+<div class="filters">
+  <%= link_to 'On Sale', on_sale_products_path %> |
+  <%= link_to 'New Arrivals', new_arrivals_products_path %> |
+  <%= link_to 'Recently Updated', recently_updated_products_path %>
+</div>
+
 <div class="categories">
   <h2>Categories</h2>
   <ul>
@@ -7,12 +14,18 @@
     <% end %>
   </ul>
 </div>
+
 <div class="products">
   <% @products.each do |product| %>
     <div class="product">
       <h2><%= link_to product.name, product_path(product) %></h2>
       <p><%= product.description %></p>
       <p>Price: <%= number_to_currency(product.price) %></p>
+      <p><%= 'On Sale!' if product.on_sale_status %></p>
     </div>
   <% end %>
+</div>
+
+<div class="pagination">
+  <%= paginate @products %>
 </div>

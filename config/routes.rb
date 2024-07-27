@@ -15,8 +15,16 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Define products routes
-  resources :products, only: [:index, :show]
+  resources :products, only: [:index, :show] do
+    collection do
+      get 'on_sale'
+      get 'new_arrivals'
+      get 'recently_updated'
+    end
+  end
+
+  # Define categories routes with nested products index route
   resources :categories, only: [:index, :show] do
     resources :products, only: [:index]
-end
+  end
 end
