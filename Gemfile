@@ -82,3 +82,4 @@ gem 'mini_magick' # For image processing
 
 gem 'carrierwave'
 
+gem 'ransack'
