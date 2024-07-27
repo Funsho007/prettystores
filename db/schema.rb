@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_27_035630) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_27_151330) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -91,6 +91,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_27_035630) do
     t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "primary_province_id"
+    t.integer "alternative_province_id"
+    t.index ["primary_province_id"], name: "index_customers_on_primary_province_id"
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -132,6 +135,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_27_035630) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category_id", null: false
+    t.integer "brand_id", null: false
+    t.integer "type_id", null: false
+    t.boolean "on_sale_status"
+    t.index ["brand_id"], name: "index_products_on_brand_id"
+    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["type_id"], name: "index_products_on_type_id"
+  end
+
+  create_table "products_tags", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "tag_id", null: false
   end
 
   create_table "provinces", force: :cascade do |t|
@@ -159,7 +174,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_27_035630) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "customers", "provinces", column: "primary_province_id"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "customers"
+  add_foreign_key "products", "brands"
+  add_foreign_key "products", "categories"
+  add_foreign_key "products", "types"
 end

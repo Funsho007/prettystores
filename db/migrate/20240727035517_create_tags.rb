@@ -1,9 +1,8 @@
-class CreateTags < ActiveRecord::Migration[7.1]
+class CreateProductsTags < ActiveRecord::Migration[6.1]
   def change
-    create_table :tags do |t|
-      t.string :name
-
-      t.timestamps
+    create_table :products_tags, id: false do |t|
+      t.references :product, null: false, foreign_key: true
+      t.references :tag, null: false, foreign_key: true
     end
   end
 end
