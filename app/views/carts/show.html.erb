@@ -1,0 +1,44 @@
+<div>
+  <h1>Your Shopping Cart</h1>
+
+  <% if @cart.empty? %>
+    <p>Your cart is empty.</p>
+  <% else %>
+    <% product_ids = @cart.keys %>
+    <% products = Product.where(id: product_ids) %>
+    <% product_hash = products.index_by(&:id) %>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cart.each do |product_id, quantity| %>
+          <% product = product_hash[product_id.to_i] %>
+          <% if product %>
+            <tr>
+              <td><%= link_to product.name, product_path(product) %></td>
+              <td><%= quantity %></td>
+              <td><%= number_to_currency(product.price) %></td>
+              <td><%= number_to_currency(product.price * quantity) %></td>
+              <td><%= link_to 'Remove', remove_item_cart_path(product_id: product.id), method: :delete %></td>
+            </tr>
+          <% else %>
+            <tr>
+              <td colspan="5">Product not found</td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <p><strong>Total: <%= number_to_currency(@cart.sum { |product_id, quantity| product_hash[product_id.to_i]&.price.to_f * quantity }) %></strong></p>
+  <% end %>
+
+  <%= link_to 'Continue Shopping', products_path %>
+</div>

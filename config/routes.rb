@@ -20,12 +20,18 @@ Rails.application.routes.draw do
       get 'on_sale'
       get 'new_arrivals'
       get 'recently_updated'
-      get 'search' # Add the search route here
+      get 'search'
     end
   end
 
   # Define categories routes with nested products index route
   resources :categories, only: [:index, :show] do
     resources :products, only: [:index]
+  end
+
+  # Define cart routes
+  resource :cart, only: [:show] do
+    post 'add_item/:product_id', to: 'carts#add_item', as: 'add_item'
+    delete 'remove_item/:product_id', to: 'carts#remove_item', as: 'remove_item'
   end
 end
